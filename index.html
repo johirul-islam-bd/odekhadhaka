@@ -1,0 +1,426 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Unseen Dhaka with Mr. J</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wdth,wght@75..125,400..800&family=Galada&family=Hind+Siliguri:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: map-first workbench — big thana map on the left, live tally on the right; stacks on phones. Rickshaw-paint trio for the three levels. */
+:root{
+  --bg:#eef2f1; --panel:#ffffff; --ink:#172024; --muted:#56646a; --line:#c9d3d1; --land:#dde4e2; --landhover:#cdd7d4;
+  --l3:#d21f6a; --l2:#0d8f83; --l1:#e7a618; --onl:#ffffff; --onl1:#2a1d00;
+  --display:"Anek Bangla","Hind Siliguri",system-ui,sans-serif;
+  --bangla:"Galada","Anek Bangla",serif;
+  --body:"Hind Siliguri",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101517; --panel:#182023; --ink:#e6eceb; --muted:#93a2a6; --line:#33403f; --land:#25302f; --landhover:#31403e;
+  --l3:#ff4b90; --l2:#25c2b2; --l1:#f4c14a; --onl:#101517; --onl1:#101517; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101517; --panel:#182023; --ink:#e6eceb; --muted:#93a2a6; --line:#33403f; --land:#25302f; --landhover:#31403e;
+  --l3:#ff4b90; --l2:#25c2b2; --l1:#f4c14a; --onl:#101517; --onl1:#101517; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:20px 40px}
+.stripe{height:6px;background:repeating-linear-gradient(90deg,var(--l3) 0 28px,var(--l1) 28px 40px,var(--l2) 40px 68px,var(--l1) 68px 80px)}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;padding-block:18px 18px}
+.brand{display:flex;flex-direction:column;gap:2px;min-width:0}
+.brand .bn{font-family:var(--bangla);font-size:1.25rem;color:var(--l3);line-height:1.1}
+h1{font-family:var(--display);font-variation-settings:"wdth" 80;font-weight:800;font-size:clamp(2rem,5.5vw,3.4rem);line-height:.95;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 .with{font-weight:500;color:var(--muted);font-size:.5em;letter-spacing:0;font-variation-settings:"wdth" 100;white-space:nowrap}
+.lede{color:var(--muted);max-width:44ch;margin:0;font-size:.95rem}
+.grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.mapcard{position:relative;padding:12px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:4px 4px 10px}
+.brushes{display:flex;flex-wrap:wrap;gap:6px}
+.brush{font:inherit;font-size:.86rem;font-weight:600;display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.brush .sw{width:12px;height:12px;border-radius:3px;background:var(--c);border:1px solid var(--line)}
+.brush[aria-pressed="true"]{border-color:var(--ink);background:var(--bg)}
+.brush:focus-visible,.chip:focus-visible,.btn:focus-visible,path.th:focus-visible{outline:2.5px solid var(--l2);outline-offset:2px}
+.brush kbd{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.hint{font-size:.8rem;color:var(--muted)}
+svg#map{display:block;width:100%;height:auto;touch-action:manipulation}
+path.th{fill:var(--land);stroke:var(--panel);stroke-width:1.1;stroke-linejoin:round;cursor:pointer;transition:fill .15s}
+path.th:hover{fill:var(--landhover)}
+path.th[data-l="1"]{fill:var(--l1)} path.th[data-l="2"]{fill:var(--l2)} path.th[data-l="3"]{fill:var(--l3)}
+path.th[data-l]:hover{opacity:.85}
+path.th:focus{outline:none}
+text.lb{font-family:var(--body);font-weight:600;fill:var(--muted);pointer-events:none;text-anchor:middle;dominant-baseline:middle;paint-order:stroke;stroke:var(--land);stroke-width:2.6px}
+text.lb.on{fill:var(--onl);stroke:none}
+text.lb.on1{fill:var(--onl1);stroke:none}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);padding:6px 10px;border-radius:6px;font-size:.82rem;line-height:1.3;white-space:nowrap;transform:translate(-50%,-115%)}
+.tip b{font-weight:600}.tip span{font-family:var(--mono);font-size:.75rem;opacity:.8}
+.compass{position:absolute;right:20px;bottom:18px;font-family:var(--mono);font-size:.7rem;color:var(--muted);text-align:center;line-height:1.1;pointer-events:none}
+.side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.score{padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px}
+.eyebrow{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0}
+.big{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.pct{font-family:var(--display);font-variation-settings:"wdth" 75;font-weight:800;font-size:4.4rem;line-height:.85;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.pct small{font-size:.45em;font-weight:600}
+.of{color:var(--muted);font-size:.92rem}
+.of b{color:var(--ink);font-variant-numeric:tabular-nums;font-weight:600}
+.stack{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--land)}
+.stack i{display:block;height:100%;transition:width .3s}
+.legend{display:grid;grid-template-columns:auto 1fr auto auto;gap:4px 10px;font-size:.86rem;align-items:center}
+.legend .sw{width:10px;height:10px;border-radius:2px;background:var(--c)}
+.num{font-family:var(--mono);font-size:.78rem;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.btn{font:inherit;font-size:.85rem;font-weight:600;padding:7px 13px;border-radius:7px;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.danger{border-color:var(--l3);color:var(--l3)}
+.status{font-size:.8rem;color:var(--muted);min-height:1.2em}
+.regions{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.reg{display:flex;flex-direction:column;gap:6px}
+.reghead{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.reghead h3{font-family:var(--display);font-variation-settings:"wdth" 90;font-size:1.05rem;font-weight:700;margin:0}
+.bar{height:6px;border-radius:3px;background:var(--land);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font:inherit;font-size:.78rem;padding:2px 9px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.chip[data-l="1"]{background:var(--l1);border-color:var(--l1);color:var(--onl1)}
+.chip[data-l="2"]{background:var(--l2);border-color:var(--l2);color:var(--onl)}
+.chip[data-l="3"]{background:var(--l3);border-color:var(--l3);color:var(--onl)}
+.next{padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.next ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:2px}
+.next li{font-size:.9rem}
+.next li .num{display:inline;margin-left:6px}
+footer{margin-top:22px;font-size:.75rem;color:var(--muted);max-width:80ch}
+.traveller{padding:14px 16px;display:flex;gap:14px;align-items:center}
+.avatar{flex:none;width:68px;height:68px;border-radius:50%;border:2px dashed var(--line);background:var(--bg);color:var(--muted);font:600 1.6rem var(--display);cursor:pointer;padding:0;overflow:hidden;display:grid;place-items:center}
+.avatar.has{border:3px solid var(--l3)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar:focus-visible,.linkbtn:focus-visible,#tname:focus-visible{outline:2.5px solid var(--l2);outline-offset:2px}
+.tfields{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+#tname{font:700 1.3rem var(--display);color:var(--ink);background:transparent;border:none;border-bottom:1.5px solid var(--line);padding:2px 0;width:100%;min-width:0}
+#tname::placeholder{color:var(--muted);font-weight:500}
+.tlinks{display:flex;gap:14px}
+.linkbtn{font:inherit;font-size:.8rem;color:var(--l2);background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.sheet{position:fixed;inset:0;background:rgba(10,14,16,.6);display:grid;place-items:center;padding:16px;z-index:10}
+.sheetbox{max-width:520px;width:100%;max-height:100%;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.sheethead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+#cardImg{width:100%;height:auto;border-radius:6px;border:1px solid var(--line)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<div class="stripe" aria-hidden="true"></div>
+<div class="wrap">
+<header>
+  <div class="brand">
+    <span class="bn" lang="bn">অদেখা ঢাকা</span>
+    <h1>Unseen Dhaka <span class="with">with Mr. J</span></h1>
+  </div>
+  <p class="lede">Tap the thanas you've toured. The tally adds up the land area of each one you mark across the 41 Dhaka Metropolitan thanas.</p>
+</header>
+<div class="grid">
+  <section class="card mapcard" aria-label="Dhaka thana map">
+    <div class="toolbar">
+      <div class="brushes" role="group" aria-label="Mark as">
+        <button class="brush" id="b3" data-b="3" style="--c:var(--l3)" aria-pressed="false"><span class="sw"></span>Explored <kbd>3</kbd></button>
+        <button class="brush" id="b2" data-b="2" style="--c:var(--l2)" aria-pressed="true"><span class="sw"></span>Visited <kbd>2</kbd></button>
+        <button class="brush" id="b1" data-b="1" style="--c:var(--l1)" aria-pressed="false"><span class="sw"></span>Passed through <kbd>1</kbd></button>
+      </div>
+      <span class="hint">Tap again to clear</span>
+    </div>
+    <svg id="map" role="group" aria-label="41 thanas of Dhaka"></svg>
+    <div class="compass" aria-hidden="true">N<br>▲</div>
+    <div class="tip" id="tip" hidden></div>
+  </section>
+  <aside class="side">
+    <section class="card traveller" aria-label="Traveller">
+      <button class="avatar" id="avatarBtn" aria-label="Add your photo"><img id="avatarImg" alt="" hidden><span id="avatarInit">+</span></button>
+      <div class="tfields">
+        <label class="eyebrow" for="tname">Traveller</label>
+        <input id="tname" type="text" maxlength="40" placeholder="Your name" autocomplete="name">
+        <div class="tlinks"><button class="linkbtn" id="photoBtn">Add photo</button><button class="linkbtn" id="photoDel" hidden>Remove photo</button></div>
+      </div>
+      <input type="file" id="photo" accept="image/*" hidden>
+    </section>
+    <section class="card score" aria-live="polite">
+      <p class="eyebrow">Dhaka toured</p>
+      <div class="big"><span class="pct" id="pct">0<small>%</small></span>
+        <span class="of"><b id="km">0.0</b> of <b id="tot">0</b> km²<br><b id="cnt">0</b> of <b id="ntot">41</b> thanas</span></div>
+      <div class="stack" id="stack" aria-hidden="true"></div>
+      <div class="legend" id="legend"></div>
+      <div class="actions">
+        <button class="btn primary" id="dl">Download image</button>
+        <button class="btn" id="copy">Copy summary</button>
+        <button class="btn" id="reset">Clear map</button>
+      </div>
+      <div class="actions" id="confirm" hidden>
+        <span class="status">Clear every thana you've marked?</span>
+        <button class="btn danger" id="yes">Clear</button>
+        <button class="btn" id="no">Keep</button>
+      </div>
+      <div class="status" id="status"></div>
+    </section>
+    <section class="card regions" id="regions" aria-label="Breakdown by area of the city">
+      <p class="eyebrow">Breakdown by area</p>
+    </section>
+    <section class="card next">
+      <p class="eyebrow">Biggest unseen thanas</p>
+      <ol id="next"></ol>
+    </section>
+  </aside>
+</div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetT">
+  <div class="sheetbox card">
+    <div class="sheethead"><p class="eyebrow" id="sheetT">Your Unseen Dhaka card</p><button class="btn" id="close">Close</button></div>
+    <img id="cardImg" alt="Share card showing your toured thanas">
+    <div class="actions"><button class="btn primary" id="save">Save PNG</button><span class="status" id="sheetStatus"></span></div>
+  </div>
+</div>
+<footer>Thana boundaries: geoBoundaries gbOpen BGD ADM3 (simplified), CC BY 4.0, from Bangladesh Bureau of Statistics / OCHA. Shapes are simplified, so areas are approximate. Your marks are saved in this browser only. City groupings are informal, not official DMP divisions.</footer>
+</div>
+<script>window.__THANAS=[{"n":"Adabor","bn":"আদাবর","r":"West & Mirpur","a":2.32,"p":[[[[90.35766,23.77656],[90.35414,23.77595],[90.35079,23.77825],[90.34592,23.77292],[90.34231,23.77206],[90.34416,23.76859],[90.34554,23.76847],[90.34954,23.76219],[90.3589,23.76242],[90.35916,23.77056],[90.36104,23.77337],[90.36557,23.77493],[90.36203,23.77742],[90.35766,23.77656]]]]},{"n":"Badda","bn":"বাড্ডা","r":"East","a":36.66,"p":[[[[90.48577,23.82133],[90.47974,23.82302],[90.47343,23.82138],[90.45547,23.82762],[90.45386,23.82677],[90.44826,23.82808],[90.44197,23.82601],[90.43628,23.82748],[90.42911,23.82607],[90.42957,23.82157],[90.42165,23.82051],[90.41899,23.82163],[90.41672,23.81988],[90.41784,23.81636],[90.41514,23.81632],[90.41533,23.81103],[90.42109,23.81191],[90.42018,23.81056],[90.42347,23.80724],[90.42225,23.80667],[90.42604,23.79049],[90.4261,23.78908],[90.42204,23.78879],[90.42044,23.7772],[90.41757,23.76983],[90.4237,23.76892],[90.43363,23.76323],[90.43604,23.76284],[90.43695,23.76477],[90.44182,23.76625],[90.4416,23.76386],[90.44442,23.76329],[90.44604,23.75911],[90.45448,23.76013],[90.45478,23.76392],[90.45228,23.76256],[90.45215,23.76603],[90.45596,23.76848],[90.45662,23.77081],[90.46198,23.7736],[90.45873,23.77567],[90.46276,23.78238],[90.46541,23.78343],[90.47162,23.7818],[90.47198,23.78533],[90.48107,23.79349],[90.48183,23.80285],[90.48419,23.80786],[90.4836,23.81118],[90.48538,23.81706],[90.48779,23.81764],[90.48577,23.82133]]]]},{"n":"Bangshal","bn":"বংশাল","r":"Old Dhaka","a":1.45,"p":[[[[90.41188,23.72294],[90.40033,23.72393],[90.39831,23.71951],[90.40123,23.714],[90.40098,23.71281],[90.39916,23.713],[90.39972,23.71077],[90.40204,23.70968],[90.40481,23.71449],[90.41153,23.71352],[90.41188,23.72294]]]]},{"n":"Biman Bandar","bn":"বিমানবন্দর","r":"North","a":8.01,"p":[[[[90.4072,23.85792],[90.40639,23.85367],[90.40037,23.86071],[90.39247,23.86126],[90.38655,23.85758],[90.38545,23.85687],[90.39313,23.84683],[90.39437,23.84152],[90.39983,23.8389],[90.399,23.83418],[90.40055,23.83221],[90.40664,23.83165],[90.41044,23.83408],[90.41319,23.83363],[90.42183,23.84091],[90.42166,23.84536],[90.42388,23.84758],[90.4246,23.84986],[90.42083,23.85263],[90.41612,23.8593],[90.4072,23.85792]]]]},{"n":"Cantonment","bn":"ক্যান্টনমেন্ট","r":"East","a":10.97,"p":[[[[90.41672,23.81988],[90.4143,23.82155],[90.41266,23.82577],[90.41319,23.83363],[90.41044,23.83408],[90.40664,23.83165],[90.40055,23.83221],[90.399,23.83418],[90.39983,23.8389],[90.39437,23.84152],[90.38736,23.84435],[90.38725,23.84172],[90.38893,23.83208],[90.39348,23.82693],[90.38287,23.82084],[90.38306,23.81674],[90.38806,23.81557],[90.39116,23.8163],[90.39154,23.81494],[90.40024,23.81718],[90.39867,23.80586],[90.39437,23.80064],[90.3918,23.7905],[90.38765,23.79073],[90.38718,23.78933],[90.38871,23.78765],[90.38752,23.78703],[90.38826,23.78164],[90.39089,23.77938],[90.39215,23.78239],[90.39294,23.78174],[90.3941,23.77642],[90.39782,23.77811],[90.40112,23.79868],[90.4024,23.80047],[90.40456,23.79971],[90.40673,23.80105],[90.4068,23.80506],[90.41229,23.80456],[90.41551,23.80641],[90.41308,23.80978],[90.41533,23.81103],[90.41514,23.81632],[90.41784,23.81636],[90.41672,23.81988]]]]},{"n":"Chak Bazar","bn":"চকবাজার","r":"Old Dhaka","a":1.63,"p":[[[[90.40033,23.72393],[90.39948,23.72404],[90.39001,23.72415],[90.39114,23.71891],[90.38316,23.71328],[90.38519,23.71229],[90.39972,23.71077],[90.39916,23.713],[90.40098,23.71281],[90.40123,23.714],[90.39831,23.71951],[90.40033,23.72393]]]]},{"n":"Dakshinkhan","bn":"দক্ষিণখান","r":"North","a":8.06,"p":[[[[90.42388,23.84758],[90.43418,23.84502],[90.43664,23.84761],[90.44224,23.84662],[90.44707,23.84887],[90.45301,23.84587],[90.45392,23.84875],[90.44899,23.84921],[90.44729,23.8523],[90.44801,23.85458],[90.44374,23.85971],[90.43933,23.86002],[90.43844,23.85699],[90.43428,23.86343],[90.43721,23.86606],[90.43396,23.86526],[90.42978,23.86775],[90.42801,23.86482],[90.42239,23.86341],[90.41895,23.86734],[90.41923,23.87295],[90.41559,23.87035],[90.41616,23.86836],[90.4138,23.8704],[90.41904,23.87793],[90.41836,23.88021],[90.41521,23.88201],[90.41632,23.88604],[90.41193,23.88279],[90.40649,23.88197],[90.4072,23.85792],[90.41612,23.8593],[90.42083,23.85263],[90.4246,23.84986],[90.42388,23.84758]]]]},{"n":"Darus Salam","bn":"দারুস সালাম","r":"West & Mirpur","a":3.84,"p":[[[[90.35766,23.77656],[90.35743,23.78433],[90.35386,23.78512],[90.35181,23.78157],[90.34892,23.78301],[90.35021,23.79344],[90.34914,23.79628],[90.34765,23.79586],[90.34652,23.79813],[90.34314,23.79867],[90.33954,23.79751],[90.33959,23.79014],[90.338,23.78643],[90.33544,23.78481],[90.33804,23.77898],[90.33451,23.77524],[90.34231,23.77206],[90.34592,23.77292],[90.35079,23.77825],[90.35414,23.77595],[90.35766,23.77656]]]]},{"n":"Demra","bn":"ডেমরা","r":"South-East","a":22.6,"p":[[[[90.48247,23.76181],[90.47395,23.76147],[90.47231,23.75401],[90.46205,23.75223],[90.45973,23.7501],[90.46018,23.74273],[90.46,23.7406],[90.4624,23.74047],[90.4641,23.73845],[90.46435,23.73479],[90.45615,23.73312],[90.45937,23.72582],[90.46311,23.72589],[90.46479,23.71994],[90.46752,23.7204],[90.46819,23.71906],[90.47372,23.72256],[90.47439,23.72139],[90.47643,23.70958],[90.47042,23.70682],[90.46783,23.70236],[90.46595,23.70221],[90.46636,23.70022],[90.46476,23.6994],[90.46671,23.69484],[90.46828,23.68522],[90.47009,23.68515],[90.4741,23.69022],[90.47781,23.6911],[90.47973,23.69366],[90.48572,23.696],[90.48871,23.69564],[90.48869,23.69906],[90.49147,23.70091],[90.49779,23.70149],[90.49902,23.70525],[90.50466,23.70574],[90.51252,23.70917],[90.51279,23.70957],[90.50804,23.71469],[90.50185,23.71805],[90.49928,23.7225],[90.50047,23.72597],[90.49753,23.73062],[90.48993,23.73599],[90.49246,23.74332],[90.48571,23.7492],[90.48732,23.756],[90.48299,23.75883],[90.48247,23.76181]]]]},{"n":"Dhanmondi","bn":"ধানমন্ডি","r":"Central","a":2.78,"p":[[[[90.38321,23.74009],[90.37824,23.75127],[90.37497,23.75693],[90.36386,23.74879],[90.37029,23.73249],[90.37046,23.73616],[90.37636,23.73829],[90.37845,23.73738],[90.38353,23.73847],[90.38321,23.74009]]]]},{"n":"Gendaria","bn":"গেন্ডারিয়া","r":"Old Dhaka","a":1.58,"p":[[[[90.42603,23.71638],[90.4243,23.71786],[90.42238,23.71605],[90.41986,23.71702],[90.41804,23.7105],[90.42062,23.70862],[90.41766,23.70237],[90.41944,23.70181],[90.41708,23.6997],[90.42029,23.69599],[90.42379,23.69821],[90.42351,23.70001],[90.42478,23.6993],[90.42573,23.70048],[90.42628,23.69918],[90.42652,23.70142],[90.42918,23.70172],[90.42413,23.71019],[90.42354,23.71214],[90.42648,23.71177],[90.42603,23.71638]]]]},{"n":"Gulshan","bn":"গুলশান","r":"East","a":8.71,"p":[[[[90.41533,23.81103],[90.41308,23.80978],[90.41551,23.80641],[90.41229,23.80456],[90.4068,23.80506],[90.40673,23.80105],[90.40456,23.79971],[90.4024,23.80047],[90.40112,23.79868],[90.39782,23.77811],[90.39786,23.7781],[90.40005,23.77334],[90.41395,23.77223],[90.41521,23.77026],[90.41757,23.76983],[90.42044,23.7772],[90.42204,23.78879],[90.4261,23.78908],[90.42604,23.79049],[90.42225,23.80667],[90.42347,23.80724],[90.42018,23.81056],[90.42109,23.81191],[90.41533,23.81103]]]]},{"n":"Hazaribagh","bn":"হাজারীবাগ","r":"Old Dhaka","a":5.6,"p":[[[[90.36386,23.74879],[90.35617,23.74539],[90.35462,23.74751],[90.35341,23.74553],[90.35103,23.74622],[90.35499,23.7539],[90.35649,23.754],[90.35149,23.75807],[90.3465,23.75389],[90.33943,23.75203],[90.33787,23.7503],[90.34208,23.74835],[90.35251,23.7383],[90.35383,23.73851],[90.35862,23.72771],[90.36028,23.72777],[90.36064,23.72537],[90.36557,23.72459],[90.36512,23.72334],[90.37566,23.72172],[90.37728,23.72601],[90.37558,23.72959],[90.37029,23.73249],[90.36386,23.74879]]]]},{"n":"Jatrabari","bn":"যাত্রাবাড়ী","r":"South-East","a":12.25,"p":[[[[90.45615,23.73312],[90.44738,23.72963],[90.44637,23.727],[90.44813,23.72447],[90.44683,23.72328],[90.43214,23.72255],[90.43122,23.71967],[90.42837,23.72033],[90.42773,23.71675],[90.42603,23.71638],[90.42648,23.71177],[90.42354,23.71214],[90.42413,23.71019],[90.42948,23.70773],[90.4337,23.70343],[90.43827,23.70298],[90.43871,23.70109],[90.44189,23.70025],[90.44309,23.69822],[90.44957,23.70307],[90.46671,23.69484],[90.46476,23.6994],[90.46636,23.70022],[90.46595,23.70221],[90.46783,23.70236],[90.47042,23.70682],[90.47643,23.70958],[90.47439,23.72139],[90.47372,23.72256],[90.46819,23.71906],[90.46752,23.7204],[90.46479,23.71994],[90.46311,23.72589],[90.45937,23.72582],[90.45615,23.73312]]]]},{"n":"Kadamtali","bn":"কদমতলী","r":"South-East","a":9.12,"p":[[[[90.46671,23.69484],[90.44957,23.70307],[90.44309,23.69822],[90.44189,23.70025],[90.43871,23.70109],[90.43554,23.70024],[90.43451,23.69362],[90.4383,23.68764],[90.43632,23.68714],[90.43428,23.68927],[90.42722,23.68867],[90.42668,23.6873],[90.44543,23.66884],[90.44896,23.66811],[90.45262,23.67281],[90.45386,23.67756],[90.45576,23.67712],[90.4586,23.67903],[90.45835,23.68035],[90.46193,23.68353],[90.46482,23.68275],[90.46828,23.68522],[90.46671,23.69484]]]]},{"n":"Kafrul","bn":"কাফরুল","r":"West & Mirpur","a":9.36,"p":[[[[90.38306,23.81674],[90.38298,23.8117],[90.37766,23.81139],[90.37459,23.80617],[90.36856,23.8071],[90.37651,23.78865],[90.3725,23.78813],[90.36968,23.78337],[90.37207,23.78479],[90.37296,23.78277],[90.37841,23.78398],[90.3833,23.76546],[90.38899,23.76457],[90.38991,23.7753],[90.3941,23.77642],[90.39294,23.78174],[90.39215,23.78239],[90.39089,23.77938],[90.38826,23.78164],[90.38752,23.78703],[90.38871,23.78765],[90.38718,23.78933],[90.38765,23.79073],[90.3918,23.7905],[90.39437,23.80064],[90.39867,23.80586],[90.40024,23.81718],[90.39154,23.81494],[90.39116,23.8163],[90.38806,23.81557],[90.38306,23.81674]]]]},{"n":"Kalabagan","bn":"কলাবাগান","r":"Central","a":1.39,"p":[[[[90.38321,23.74009],[90.38369,23.7415],[90.39183,23.74167],[90.39322,23.74998],[90.38737,23.75101],[90.38249,23.75304],[90.37824,23.75127],[90.38321,23.74009]]]]},{"n":"Kamrangir Char","bn":"কামরাঙ্গীরচর","r":"Old Dhaka","a":1.56,"p":[[[[90.38316,23.71328],[90.3812,23.71426],[90.37798,23.71077],[90.37352,23.71037],[90.37167,23.71409],[90.3603,23.72052],[90.36206,23.71239],[90.36739,23.70741],[90.38643,23.70876],[90.38519,23.71229],[90.38316,23.71328]]]]},{"n":"Khilgaon","bn":"খিলগাঁও","r":"East","a":13.85,"p":[[[[90.43363,23.76323],[90.43234,23.76013],[90.42933,23.76097],[90.42495,23.75069],[90.41824,23.7524],[90.41601,23.74949],[90.42352,23.74808],[90.42663,23.74397],[90.4338,23.74572],[90.43425,23.74284],[90.43957,23.74472],[90.44169,23.74711],[90.44196,23.74496],[90.44823,23.74423],[90.4547,23.74136],[90.45712,23.74079],[90.46018,23.74273],[90.45973,23.7501],[90.46205,23.75223],[90.47231,23.75401],[90.47395,23.76147],[90.48247,23.76181],[90.48244,23.77336],[90.47889,23.77758],[90.47162,23.7818],[90.46541,23.78343],[90.46276,23.78238],[90.45873,23.77567],[90.46198,23.7736],[90.45662,23.77081],[90.45596,23.76848],[90.45215,23.76603],[90.45228,23.76256],[90.45478,23.76392],[90.45448,23.76013],[90.44604,23.75911],[90.44442,23.76329],[90.4416,23.76386],[90.44182,23.76625],[90.43695,23.76477],[90.43604,23.76284],[90.43363,23.76323]]]]},{"n":"Khilkhet","bn":"খিলক্ষেত","r":"North","a":15.65,"p":[[[[90.48577,23.82133],[90.48661,23.8261],[90.48427,23.82814],[90.48394,23.83158],[90.48046,23.83221],[90.47725,23.83498],[90.47175,23.84249],[90.47127,23.84731],[90.46569,23.84366],[90.46407,23.8463],[90.45856,23.84668],[90.45392,23.84875],[90.45301,23.84587],[90.44707,23.84887],[90.44224,23.84662],[90.43664,23.84761],[90.43418,23.84502],[90.42388,23.84758],[90.42166,23.84536],[90.42183,23.84091],[90.41319,23.83363],[90.41266,23.82577],[90.4143,23.82155],[90.41672,23.81988],[90.41899,23.82163],[90.42165,23.82051],[90.42957,23.82157],[90.42911,23.82607],[90.43628,23.82748],[90.44197,23.82601],[90.44826,23.82808],[90.45386,23.82677],[90.45547,23.82762],[90.47343,23.82138],[90.47974,23.82302],[90.48577,23.82133]]]]},{"n":"Kotwali","bn":"কোতোয়ালী","r":"Old Dhaka","a":0.74,"p":[[[[90.40204,23.70968],[90.41187,23.70354],[90.41153,23.71352],[90.40481,23.71449],[90.40204,23.70968]]]]},{"n":"Lalbagh","bn":"লালবাগ","r":"Old Dhaka","a":4.23,"p":[[[[90.39948,23.72404],[90.39088,23.72643],[90.38744,23.72991],[90.38709,23.73264],[90.37558,23.72959],[90.37728,23.72601],[90.37566,23.72172],[90.36512,23.72334],[90.36557,23.72459],[90.36064,23.72537],[90.36028,23.72777],[90.35862,23.72771],[90.3603,23.72052],[90.37167,23.71409],[90.37352,23.71037],[90.37798,23.71077],[90.3812,23.71426],[90.38316,23.71328],[90.39114,23.71891],[90.39001,23.72415],[90.39948,23.72404]]]]},{"n":"Mirpur","bn":"মিরপুর","r":"West & Mirpur","a":6.54,"p":[[[[90.36203,23.77742],[90.366,23.78245],[90.36968,23.78337],[90.3725,23.78813],[90.37651,23.78865],[90.36856,23.8071],[90.36763,23.81047],[90.36224,23.81053],[90.3545,23.80699],[90.35157,23.80603],[90.35526,23.79986],[90.34914,23.79628],[90.35021,23.79344],[90.34892,23.78301],[90.35181,23.78157],[90.35386,23.78512],[90.35743,23.78433],[90.35766,23.77656],[90.36203,23.77742]]]]},{"n":"Mohammadpur","bn":"মোহাম্মদপুর","r":"West & Mirpur","a":7.19,"p":[[[[90.34416,23.76859],[90.34051,23.76602],[90.32974,23.75095],[90.33333,23.74919],[90.33787,23.7503],[90.33943,23.75203],[90.3465,23.75389],[90.35149,23.75807],[90.35649,23.754],[90.35499,23.7539],[90.35103,23.74622],[90.35341,23.74553],[90.35462,23.74751],[90.35617,23.74539],[90.36386,23.74879],[90.37497,23.75693],[90.37824,23.75127],[90.38249,23.75304],[90.38182,23.75859],[90.37423,23.75816],[90.36557,23.77493],[90.36104,23.77337],[90.35916,23.77056],[90.3589,23.76242],[90.34954,23.76219],[90.34554,23.76847],[90.34416,23.76859]]]]},{"n":"Motijheel","bn":"মতিঝিল","r":"Central","a":3.74,"p":[[[[90.41601,23.74949],[90.41296,23.74994],[90.41249,23.74556],[90.41428,23.74416],[90.41987,23.73994],[90.4152,23.73222],[90.4139,23.72262],[90.42168,23.72151],[90.42878,23.72234],[90.42839,23.73859],[90.42663,23.74397],[90.42352,23.74808],[90.41601,23.74949]]]]},{"n":"New Market","bn":"নিউ মার্কেট","r":"Central","a":1.64,"p":[[[[90.37029,23.73249],[90.37558,23.72959],[90.38709,23.73264],[90.39183,23.74167],[90.38369,23.7415],[90.38321,23.74009],[90.38353,23.73847],[90.37845,23.73738],[90.37636,23.73829],[90.37046,23.73616],[90.37029,23.73249]]]]},{"n":"Pallabi","bn":"পল্লবী","r":"West & Mirpur","a":10.87,"p":[[[[90.38725,23.84172],[90.38414,23.84282],[90.38144,23.83633],[90.38381,23.82479],[90.38217,23.82287],[90.37765,23.82287],[90.3776,23.82977],[90.36667,23.83683],[90.36741,23.83904],[90.36583,23.84437],[90.36291,23.84493],[90.36348,23.84843],[90.35559,23.84776],[90.35329,23.8454],[90.35602,23.84322],[90.3545,23.82916],[90.35112,23.82788],[90.35132,23.82099],[90.35271,23.82066],[90.35125,23.81762],[90.35268,23.81696],[90.35298,23.81381],[90.35611,23.8144],[90.35671,23.81194],[90.35296,23.81101],[90.3545,23.80699],[90.36224,23.81053],[90.36763,23.81047],[90.36856,23.8071],[90.37459,23.80617],[90.37766,23.81139],[90.38298,23.8117],[90.38306,23.81674],[90.38287,23.82084],[90.39348,23.82693],[90.38893,23.83208],[90.38725,23.84172]]]]},{"n":"Paltan","bn":"পল্টন","r":"Central","a":1.21,"p":[[[[90.41428,23.74416],[90.40878,23.73751],[90.41032,23.73625],[90.41191,23.72299],[90.4139,23.72262],[90.4152,23.73222],[90.41987,23.73994],[90.41428,23.74416]]]]},{"n":"Ramna","bn":"রমনা","r":"Central","a":3.49,"p":[[[[90.41296,23.74994],[90.41635,23.75589],[90.40902,23.76113],[90.39869,23.75165],[90.39412,23.74761],[90.39468,23.74591],[90.39638,23.74638],[90.39516,23.74442],[90.39599,23.74148],[90.39855,23.74214],[90.40361,23.73858],[90.40424,23.73658],[90.41032,23.73625],[90.40878,23.73751],[90.41428,23.74416],[90.41249,23.74556],[90.41296,23.74994]]]]},{"n":"Rampura","bn":"রামপুরা","r":"East","a":3.15,"p":[[[[90.41757,23.76983],[90.41521,23.77026],[90.41537,23.76765],[90.40902,23.76113],[90.41635,23.75589],[90.41296,23.74994],[90.41601,23.74949],[90.41824,23.7524],[90.42495,23.75069],[90.42933,23.76097],[90.43234,23.76013],[90.43363,23.76323],[90.4237,23.76892],[90.41757,23.76983]]]]},{"n":"Sabujbagh","bn":"সবুজবাগ","r":"East","a":6.55,"p":[[[[90.46018,23.74273],[90.45712,23.74079],[90.4547,23.74136],[90.44823,23.74423],[90.44196,23.74496],[90.44169,23.74711],[90.43957,23.74472],[90.43425,23.74284],[90.4338,23.74572],[90.42663,23.74397],[90.42839,23.73859],[90.42878,23.72234],[90.42837,23.72033],[90.43122,23.71967],[90.43214,23.72255],[90.44683,23.72328],[90.44813,23.72447],[90.44637,23.727],[90.44738,23.72963],[90.45615,23.73312],[90.46435,23.73479],[90.4641,23.73845],[90.4624,23.74047],[90.46,23.7406],[90.46018,23.74273]]]]},{"n":"Shah Ali","bn":"শাহ আলী","r":"West & Mirpur","a":3.7,"p":[[[[90.34914,23.79628],[90.35526,23.79986],[90.35157,23.80603],[90.3545,23.80699],[90.35296,23.81101],[90.35671,23.81194],[90.35611,23.8144],[90.35298,23.81381],[90.35268,23.81696],[90.35125,23.81762],[90.35271,23.82066],[90.35132,23.82099],[90.35112,23.82788],[90.34971,23.82522],[90.34602,23.82763],[90.343,23.82467],[90.34102,23.82174],[90.34149,23.81749],[90.33963,23.81123],[90.34332,23.80383],[90.34314,23.79867],[90.34652,23.79813],[90.34765,23.79586],[90.34914,23.79628]]]]},{"n":"Shahbagh","bn":"শাহবাগ","r":"Central","a":4.03,"p":[[[[90.41188,23.72294],[90.41191,23.72299],[90.41032,23.73625],[90.40424,23.73658],[90.40361,23.73858],[90.39855,23.74214],[90.39599,23.74148],[90.39516,23.74442],[90.39638,23.74638],[90.39468,23.74591],[90.39412,23.74761],[90.39322,23.74998],[90.39183,23.74167],[90.38709,23.73264],[90.38744,23.72991],[90.39088,23.72643],[90.39948,23.72404],[90.40033,23.72393],[90.41188,23.72294]]]]},{"n":"Sher-e-bangla Nagar","bn":"শেরেবাংলা নগর","r":"Central","a":4.38,"p":[[[[90.36557,23.77493],[90.37423,23.75816],[90.38182,23.75859],[90.38249,23.75304],[90.38737,23.75101],[90.39007,23.75825],[90.38395,23.75811],[90.3833,23.76546],[90.37841,23.78398],[90.37296,23.78277],[90.37207,23.78479],[90.36968,23.78337],[90.366,23.78245],[90.36203,23.77742],[90.36557,23.77493]]]]},{"n":"Shyampur","bn":"শ্যামপুর","r":"South-East","a":2.23,"p":[[[[90.42029,23.69599],[90.42722,23.68867],[90.43428,23.68927],[90.43632,23.68714],[90.4383,23.68764],[90.43451,23.69362],[90.43554,23.70024],[90.43871,23.70109],[90.43827,23.70298],[90.4337,23.70343],[90.42948,23.70773],[90.42413,23.71019],[90.42918,23.70172],[90.42652,23.70142],[90.42628,23.69918],[90.42573,23.70048],[90.42478,23.6993],[90.42351,23.70001],[90.42379,23.69821],[90.42029,23.69599]]]]},{"n":"Sutrapur","bn":"সূত্রাপুর","r":"Old Dhaka","a":2.28,"p":[[[[90.41153,23.71352],[90.41187,23.70354],[90.41708,23.6997],[90.41944,23.70181],[90.41766,23.70237],[90.42062,23.70862],[90.41804,23.7105],[90.41986,23.71702],[90.42238,23.71605],[90.4243,23.71786],[90.42603,23.71638],[90.42773,23.71675],[90.42837,23.72033],[90.42878,23.72234],[90.42168,23.72151],[90.4139,23.72262],[90.41191,23.72299],[90.41188,23.72294],[90.41153,23.71352]]]]},{"n":"Tejgaon","bn":"তেজগাঁও","r":"Central","a":2.52,"p":[[[[90.3941,23.77642],[90.38991,23.7753],[90.38899,23.76457],[90.3833,23.76546],[90.38395,23.75811],[90.39007,23.75825],[90.38737,23.75101],[90.39322,23.74998],[90.39412,23.74761],[90.39869,23.75165],[90.39415,23.75384],[90.39786,23.7781],[90.39782,23.77811],[90.3941,23.77642]]]]},{"n":"Tejgaon Ind. Area","bn":"তেজগাঁও শিল্পাঞ্চল","r":"Central","a":3.31,"p":[[[[90.39786,23.7781],[90.39415,23.75384],[90.39869,23.75165],[90.40902,23.76113],[90.41537,23.76765],[90.41521,23.77026],[90.41395,23.77223],[90.40005,23.77334],[90.39786,23.7781]]]]},{"n":"Turag","bn":"তুরাগ","r":"North","a":25.49,"p":[[[[90.38655,23.85758],[90.37942,23.86916],[90.37921,23.87245],[90.37961,23.87528],[90.38717,23.87861],[90.38776,23.88548],[90.38716,23.88698],[90.38464,23.88721],[90.38698,23.88772],[90.38768,23.8896],[90.38559,23.88962],[90.38541,23.8928],[90.38223,23.89304],[90.38284,23.89491],[90.38476,23.8949],[90.38569,23.89607],[90.38429,23.89736],[90.37715,23.89804],[90.3728,23.8948],[90.36941,23.89555],[90.36457,23.89282],[90.36318,23.8943],[90.35365,23.88586],[90.3555,23.88444],[90.35489,23.88209],[90.35188,23.88191],[90.35151,23.87879],[90.35632,23.87265],[90.35314,23.86931],[90.35369,23.86142],[90.35061,23.86026],[90.34823,23.85303],[90.34298,23.85388],[90.33712,23.84792],[90.34101,23.8423],[90.33768,23.83866],[90.33707,23.83214],[90.343,23.82467],[90.34602,23.82763],[90.34971,23.82522],[90.35112,23.82788],[90.3545,23.82916],[90.35602,23.84322],[90.35329,23.8454],[90.35559,23.84776],[90.36348,23.84843],[90.36291,23.84493],[90.36583,23.84437],[90.36741,23.83904],[90.36667,23.83683],[90.3776,23.82977],[90.37765,23.82287],[90.38217,23.82287],[90.38381,23.82479],[90.38144,23.83633],[90.38414,23.84282],[90.38725,23.84172],[90.38736,23.84435],[90.39437,23.84152],[90.39313,23.84683],[90.38545,23.85687],[90.38655,23.85758]]]]},{"n":"Uttar Khan","bn":"উত্তরখান","r":"North","a":20.41,"p":[[[[90.45392,23.84875],[90.45856,23.84668],[90.46407,23.8463],[90.46561,23.85376],[90.47086,23.85828],[90.47165,23.86608],[90.4596,23.87962],[90.46157,23.88337],[90.45967,23.88481],[90.46075,23.8932],[90.4578,23.89645],[90.4485,23.89578],[90.44617,23.89843],[90.44252,23.89855],[90.4382,23.90106],[90.41898,23.88582],[90.41632,23.88604],[90.41521,23.88201],[90.41836,23.88021],[90.41904,23.87793],[90.4138,23.8704],[90.41616,23.86836],[90.41559,23.87035],[90.41923,23.87295],[90.41895,23.86734],[90.42239,23.86341],[90.42801,23.86482],[90.42978,23.86775],[90.43396,23.86526],[90.43721,23.86606],[90.43428,23.86343],[90.43844,23.85699],[90.43933,23.86002],[90.44374,23.85971],[90.44801,23.85458],[90.44729,23.8523],[90.44899,23.84921],[90.45392,23.84875]]]]},{"n":"Uttara","bn":"উত্তরা","r":"North","a":6.93,"p":[[[[90.4072,23.85792],[90.40649,23.88197],[90.39572,23.88016],[90.39239,23.88359],[90.39373,23.88836],[90.3903,23.8905],[90.39049,23.89365],[90.38579,23.89339],[90.38476,23.8949],[90.38284,23.89491],[90.38223,23.89304],[90.38541,23.8928],[90.38559,23.88962],[90.38768,23.8896],[90.38698,23.88772],[90.38464,23.88721],[90.38716,23.88698],[90.38776,23.88548],[90.38717,23.87861],[90.37961,23.87528],[90.37921,23.87245],[90.37942,23.86916],[90.38655,23.85758],[90.39247,23.86126],[90.40037,23.86071],[90.40639,23.85367],[90.4072,23.85792]]]]}];</script>
+<script>
+(function(){
+const T = window.__THANAS;
+const REGIONS = ["Central","Old Dhaka","West & Mirpur","East","South-East","North"];
+const LV = {3:"Explored",2:"Visited",1:"Passed through"};
+const KEY = "unseen-dhaka-mrj-v1", PKEY = "unseen-dhaka-mrj-profile";
+const NS = "http://www.w3.org/2000/svg";
+const TOTAL = T.reduce((s,t)=>s+t.a,0);
+let state = {};
+try{ state = JSON.parse(localStorage.getItem(KEY)||"{}")||{}; }catch(e){ state = {}; }
+let brush = 2;
+
+// projection: equirectangular scaled by cos(lat)
+let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9;
+T.forEach(t=>t.p.forEach(pl=>pl[0].forEach(([x,y])=>{minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);})));
+const k = Math.cos((minY+maxY)/2*Math.PI/180);
+const S = 1000/((maxX-minX)*k), PAD = 14;
+const W = Math.round((maxX-minX)*k*S)+PAD*2, H = Math.round((maxY-minY)*S)+PAD*2;
+const px = ([x,y]) => [PAD+(x-minX)*k*S, PAD+(maxY-y)*S];
+
+const svg = document.getElementById("map");
+svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+const gP = document.createElementNS(NS,"g"), gL = document.createElementNS(NS,"g");
+svg.append(gP,gL);
+
+function centroid(ring){ // area-weighted centroid of a projected ring
+  let a=0,cx=0,cy=0;
+  for(let i=0;i<ring.length-1;i++){const [x0,y0]=ring[i],[x1,y1]=ring[i+1];const f=x0*y1-x1*y0;a+=f;cx+=(x0+x1)*f;cy+=(y0+y1)*f;}
+  a/=2; return a? [cx/(6*a),cy/(6*a),Math.abs(a)] : [ring[0][0],ring[0][1],0];
+}
+const LABEL_NUDGE = {"Tejgaon Ind. Area":[0,6],"Sher-e-bangla Nagar":[0,-4]};
+const SHORT = {"Tejgaon Ind. Area":"Tejgaon I/A","Sher-e-bangla Nagar":"Sher-e-Bangla Nagar","Kamrangir Char":"Kamrangirchar","Biman Bandar":"Airport"};
+const els = {};
+T.forEach(t=>{
+  let d="", best=[0,0,-1];
+  t.p.forEach(pl=>pl.forEach((ring,ri)=>{
+    const pr = ring.map(px);
+    d += "M"+pr.map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join("L")+"Z";
+    if(ri===0){const c=centroid(pr); if(c[2]>best[2]) best=c;}
+  }));
+  const p = document.createElementNS(NS,"path");
+  p.setAttribute("d",d); p.setAttribute("class","th"); p.setAttribute("tabindex","0");
+  p.setAttribute("role","button");
+  p.addEventListener("click",()=>apply(t.n));
+  p.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();apply(t.n);}});
+  p.addEventListener("pointermove",e=>showTip(e,t));
+  p.addEventListener("pointerleave",hideTip);
+  p.addEventListener("focus",()=>showTipAt(best[0],best[1],t));
+  p.addEventListener("blur",hideTip);
+  gP.append(p);
+  let lb=null;
+  if(t.a>=1.5){
+    const [nx,ny] = LABEL_NUDGE[t.n]||[0,0];
+    lb = document.createElementNS(NS,"text");
+    lb.setAttribute("class","lb"); lb.setAttribute("x",(best[0]+nx).toFixed(1)); lb.setAttribute("y",(best[1]+ny).toFixed(1));
+    lb.setAttribute("font-size", t.a>8 ? 17 : t.a>3 ? 14 : 11.5);
+    lb.textContent = SHORT[t.n]||t.n;
+    gL.append(lb);
+  }
+  els[t.n] = {p,lb,d,c:best};
+});
+
+const tip = document.getElementById("tip"), card = svg.parentElement;
+function tipHTML(t){const l=state[t.n];return `<b>${t.n}</b> · <span lang="bn">${t.bn}</span><br><span>${t.a.toFixed(2)} km² · ${l?LV[l]:"Not yet"}</span>`;}
+function showTip(e,t){const r=card.getBoundingClientRect();tip.innerHTML=tipHTML(t);tip.hidden=false;place(e.clientX-r.left,e.clientY-r.top);}
+function showTipAt(x,y,t){const r=card.getBoundingClientRect(),s=svg.getBoundingClientRect();tip.innerHTML=tipHTML(t);tip.hidden=false;place(s.left-r.left+x/W*s.width,s.top-r.top+y/H*s.height);}
+function place(x,y){const w=tip.offsetWidth/2, cw=card.clientWidth; tip.style.left=Math.max(w+4,Math.min(cw-w-4,x))+"px"; tip.style.top=Math.max(tip.offsetHeight+6,y)+"px";}
+function hideTip(){tip.hidden=true;}
+
+function apply(n){
+  if(state[n]===brush) delete state[n]; else state[n]=brush;
+  save(); render();
+  const t=T.find(t=>t.n===n); if(!tip.hidden) tip.innerHTML=tipHTML(t);
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+
+document.querySelectorAll(".brush").forEach(b=>b.addEventListener("click",()=>setBrush(+b.dataset.b)));
+function setBrush(v){brush=v;document.querySelectorAll(".brush").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.b===v)));}
+document.addEventListener("keydown",e=>{if(e.target.closest&&e.target.closest("input,textarea"))return;if(["1","2","3"].includes(e.key))setBrush(+e.key);});
+
+// side panel scaffolding
+const regBox = document.getElementById("regions"), regEls = {};
+REGIONS.forEach(r=>{
+  const list = T.filter(t=>t.r===r).sort((a,b)=>b.a-a.a);
+  const total = list.reduce((s,t)=>s+t.a,0);
+  const div = document.createElement("div"); div.className="reg";
+  div.innerHTML = `<div class="reghead"><h3>${r}</h3><span class="num"></span></div><div class="bar"></div><div class="chips"></div>`;
+  const chips = div.querySelector(".chips");
+  list.forEach(t=>{const c=document.createElement("button");c.className="chip";c.textContent=t.n;c.title=`${t.bn} · ${t.a.toFixed(2)} km²`;c.addEventListener("click",()=>apply(t.n));chips.append(c);els[t.n].chip=c;});
+  regBox.append(div); regEls[r]={div,list,total};
+});
+document.getElementById("tot").textContent = Math.round(TOTAL);
+document.getElementById("ntot").textContent = T.length;
+
+const fmt = v => v.toFixed(1);
+function render(){
+  const by={1:0,2:0,3:0}, cnt={1:0,2:0,3:0};
+  T.forEach(t=>{
+    const l=state[t.n]||0, e=els[t.n];
+    if(l){by[l]+=t.a;cnt[l]++;e.p.setAttribute("data-l",l);e.chip.setAttribute("data-l",l);}
+    else{e.p.removeAttribute("data-l");e.chip.removeAttribute("data-l");}
+    e.p.setAttribute("aria-label",`${t.n}, ${t.a.toFixed(1)} square kilometres, ${l?LV[l]:"not toured"}`);
+    e.p.setAttribute("aria-pressed",String(!!l));
+    if(e.lb) e.lb.setAttribute("class","lb"+(l===1?" on1":l?" on":""));
+  });
+  const km = by[1]+by[2]+by[3], n = cnt[1]+cnt[2]+cnt[3];
+  const pct = km/TOTAL*100;
+  document.getElementById("pct").innerHTML = (pct>0&&pct<10?pct.toFixed(1):Math.round(pct))+"<small>%</small>";
+  document.getElementById("km").textContent = fmt(km);
+  document.getElementById("cnt").textContent = n;
+  document.getElementById("stack").innerHTML = [3,2,1].map(l=>`<i style="width:${by[l]/TOTAL*100}%;background:var(--l${l})"></i>`).join("");
+  document.getElementById("legend").innerHTML = [3,2,1].map(l=>`<span class="sw" style="--c:var(--l${l})"></span><span>${LV[l]}</span><span class="num">${cnt[l]} thana${cnt[l]===1?"":"s"}</span><span class="num">${fmt(by[l])} km²</span>`).join("");
+  REGIONS.forEach(r=>{
+    const {div,list,total}=regEls[r]; const s={1:0,2:0,3:0}; let c=0;
+    list.forEach(t=>{const l=state[t.n];if(l){s[l]+=t.a;c++;}});
+    const got=s[1]+s[2]+s[3];
+    div.querySelector(".num").textContent = `${c}/${list.length} · ${Math.round(got/total*100)}% of ${fmt(total)} km²`;
+    div.querySelector(".bar").innerHTML = [3,2,1].map(l=>`<i style="width:${s[l]/total*100}%;background:var(--l${l})"></i>`).join("");
+  });
+  const un = T.filter(t=>!state[t.n]).sort((a,b)=>b.a-a.a).slice(0,5);
+  document.getElementById("next").innerHTML = un.length ? un.map(t=>`<li>${t.n} <span class="num">${t.a.toFixed(1)} km² · ${(t.a/TOTAL*100).toFixed(1)}%</span></li>`).join("") : "<li>Nothing left. Mr. J has seen all of Dhaka.</li>";
+}
+
+const status = document.getElementById("status");
+let stT; function say(m){status.textContent=m;clearTimeout(stT);stT=setTimeout(()=>status.textContent="",3500);}
+document.getElementById("copy").addEventListener("click",()=>{
+  const km=T.reduce((s,t)=>s+(state[t.n]?t.a:0),0);
+  const lines=[`Unseen Dhaka with Mr. J — I've toured ${(km/TOTAL*100).toFixed(1)}% of Dhaka (${fmt(km)} of ${Math.round(TOTAL)} km², ${Object.keys(state).length}/${T.length} thanas)`];
+  [3,2,1].forEach(l=>{const ns=T.filter(t=>state[t.n]===l).map(t=>t.n);if(ns.length)lines.push(`${LV[l]}: ${ns.join(", ")}`);});
+  const txt=lines.join("\n");
+  const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.append(ta);ta.select();let ok=false;try{ok=document.execCommand("copy");}catch(e){}ta.remove();say(ok?"Summary copied":"Copy isn't available here");};
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(()=>say("Summary copied"),fallback); else fallback();
+});
+const confirmRow=document.getElementById("confirm");
+document.getElementById("reset").addEventListener("click",()=>{confirmRow.hidden=false;document.getElementById("no").focus();});
+document.getElementById("no").addEventListener("click",()=>{confirmRow.hidden=true;});
+document.getElementById("yes").addEventListener("click",()=>{state={};save();render();confirmRow.hidden=true;say("Map cleared");});
+
+// ---- traveller profile (kept in this browser) ----
+let prof = {name:"",photo:""};
+try{ prof = Object.assign(prof, JSON.parse(localStorage.getItem(PKEY)||"{}")); }catch(e){}
+const nameIn=document.getElementById("tname"), fileIn=document.getElementById("photo");
+const avBtn=document.getElementById("avatarBtn"), avImg=document.getElementById("avatarImg"), avInit=document.getElementById("avatarInit"), delBtn=document.getElementById("photoDel");
+function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(prof));}catch(e){say("Photo is too large to remember in this browser");}}
+function initials(n){const p=n.trim().split(/\s+/).filter(Boolean);return p.length?(p[0][0]+(p.length>1?p[p.length-1][0]:"")).toUpperCase():"+";}
+function renderProf(){
+  nameIn.value=prof.name;
+  avImg.hidden=!prof.photo; if(prof.photo) avImg.src=prof.photo;
+  avInit.hidden=!!prof.photo; avInit.textContent=initials(prof.name);
+  avBtn.classList.toggle("has",!!prof.photo); delBtn.hidden=!prof.photo;
+  document.getElementById("photoBtn").textContent=prof.photo?"Change photo":"Add photo";
+}
+nameIn.addEventListener("input",()=>{prof.name=nameIn.value;saveProf();if(!prof.photo)avInit.textContent=initials(prof.name);});
+avBtn.addEventListener("click",()=>fileIn.click());
+document.getElementById("photoBtn").addEventListener("click",()=>fileIn.click());
+delBtn.addEventListener("click",()=>{prof.photo="";saveProf();renderProf();});
+fileIn.addEventListener("change",()=>{
+  const f=fileIn.files&&fileIn.files[0]; fileIn.value=""; if(!f) return;
+  if(!/^image\//.test(f.type)){say("Pick an image file (JPG or PNG)");return;}
+  const url=URL.createObjectURL(f), im=new Image();
+  im.onload=()=>{const side=Math.min(im.naturalWidth,im.naturalHeight),c=document.createElement("canvas");c.width=c.height=360;
+    c.getContext("2d").drawImage(im,(im.naturalWidth-side)/2,(im.naturalHeight-side)/2,side,side,0,0,360,360);
+    prof.photo=c.toDataURL("image/jpeg",.86);URL.revokeObjectURL(url);saveProf();renderProf();};
+  im.onerror=()=>{URL.revokeObjectURL(url);say("That image couldn't be opened. Try a JPG or PNG.");};
+  im.src=url;
+});
+renderProf();
+
+// ---- share card (1080×1350 PNG) ----
+const C = {bg:"#f3f6f5",panel:"#ffffff",ink:"#172024",muted:"#56646a",line:"#c9d3d1",land:"#dbe3e1",l3:"#d21f6a",l2:"#0d8f83",l1:"#e7a618",on:"#ffffff",on1:"#2a1d00"};
+const FD='"Anek Bangla","Hind Siliguri",sans-serif', FB='"Hind Siliguri",sans-serif', FG='"Galada","Anek Bangla",serif', FM='"IBM Plex Mono",monospace';
+function loadImg(src){return new Promise(r=>{if(!src)return r(null);const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src;});}
+function rr(x,c,X,Y,w,h,r){x.beginPath();x.roundRect?x.roundRect(X,Y,w,h,r):x.rect(X,Y,w,h);x.fillStyle=c;x.fill();}
+function fitText(x,txt,font,max,size){let s=size;do{x.font=font.replace("{s}",s);}while(x.measureText(txt).width>max&&--s>12);return s;}
+async function makeCard(){
+  try{await Promise.all(["800 76px","700 46px","600 24px","500 22px"].map(f=>document.fonts.load(f+' "Anek Bangla"')).concat([document.fonts.load('36px "Galada"',"অদেখা ঢাকা"),document.fonts.load('500 20px "IBM Plex Mono"'),document.fonts.load('500 22px "Hind Siliguri"'),document.fonts.load('600 22px "Hind Siliguri"')]));}catch(e){}
+  const cv=document.createElement("canvas"); cv.width=1080; cv.height=1350; const x=cv.getContext("2d");
+  x.fillStyle=C.bg; x.fillRect(0,0,1080,1350);
+  // rickshaw stripe
+  const pat=[[C.l3,28],[C.l1,12],[C.l2,28],[C.l1,12]]; for(let X=0,i=0;X<1080;i++){const [c,w]=pat[i%4];x.fillStyle=c;x.fillRect(X,0,w,14);X+=w;}
+  x.textBaseline="alphabetic"; x.fillStyle=C.l3; x.font='36px '+FG; x.fillText("অদেখা ঢাকা",60,86);
+  x.fillStyle=C.ink; x.font='800 76px '+FD; x.fillText("Unseen Dhaka",60,156);
+  const tw=x.measureText("Unseen Dhaka").width; x.fillStyle=C.muted; x.font='500 34px '+FD; x.fillText("with Mr. J",60+tw+16,156);
+  // traveller row
+  const ph=await loadImg(prof.photo), cx=124, cy=262, R=64;
+  x.save(); x.beginPath(); x.arc(cx,cy,R,0,Math.PI*2); x.closePath();
+  if(ph){x.clip(); x.drawImage(ph,cx-R,cy-R,R*2,R*2);} else {x.fillStyle=C.l2; x.fill(); x.fillStyle=C.on; x.font='700 50px '+FD; x.textAlign="center"; x.textBaseline="middle"; x.fillText(initials(prof.name||"?").replace("+","?"),cx,cy+3);}
+  x.restore(); x.beginPath(); x.arc(cx,cy,R+3,0,Math.PI*2); x.lineWidth=6; x.strokeStyle=C.l3; x.stroke();
+  x.textAlign="left"; x.textBaseline="alphabetic";
+  const nm=(prof.name||"").trim()||"A Dhaka explorer";
+  x.fillStyle=C.ink; fitText(x,nm,'700 {s}px '+FD,480,48); x.fillText(nm,214,256);
+  x.fillStyle=C.muted; x.font='500 24px '+FB; x.fillText("has toured Dhaka, thana by thana",214,296);
+  // big number
+  const by={1:0,2:0,3:0},cnt={1:0,2:0,3:0}; T.forEach(t=>{const l=state[t.n];if(l){by[l]+=t.a;cnt[l]++;}});
+  const km=by[1]+by[2]+by[3], n=cnt[1]+cnt[2]+cnt[3], pct=km/TOTAL*100, ps=(pct>0&&pct<10?pct.toFixed(1):Math.round(pct))+"";
+  x.textAlign="right"; x.fillStyle=C.ink; x.font='800 140px '+FD; x.fillText(ps,975,318); x.font='700 56px '+FD; x.fillText("%",1022,318);
+  x.fillStyle=C.muted; x.font='600 20px '+FB; x.fillText("OF DHAKA TOURED",1020,198); x.textAlign="left";
+  // map panel
+  rr(x,C.panel,40,360,1000,780,18);
+  const mx=60,my=380,mw=560,mh=740, sc=Math.min(mw/W,mh/H), ox=mx+(mw-W*sc)/2, oy=my+(mh-H*sc)/2;
+  x.save(); x.translate(ox,oy); x.scale(sc,sc); x.lineJoin="round";
+  T.forEach(t=>{const l=state[t.n],p=new Path2D(els[t.n].d);x.fillStyle=l?C["l"+l]:C.land;x.fill(p);x.strokeStyle=C.panel;x.lineWidth=1.3/sc*0.8;x.stroke(p);});
+  x.restore();
+  x.textAlign="center"; x.textBaseline="middle";
+  T.forEach(t=>{if(t.a<3.4||t.n==="Sher-e-bangla Nagar"||t.n==="Khilgaon")return;const l=state[t.n],[lx,ly]=els[t.n].c;const fs=t.a>8?15:12;x.font='600 '+fs+'px '+FB;
+    x.fillStyle=l===1?C.on1:l?C.on:C.muted;x.fillText(SHORT[t.n]||t.n,ox+lx*sc,oy+ly*sc);});
+  x.textAlign="left"; x.textBaseline="alphabetic";
+  // region bars
+  let ry=420; x.fillStyle=C.muted; x.font='600 18px '+FB; x.fillText("BY AREA OF THE CITY",650,ry); ry+=46;
+  REGIONS.forEach(r=>{const {list,total}=regEls[r];const s={1:0,2:0,3:0};let c=0;list.forEach(t=>{const l=state[t.n];if(l){s[l]+=t.a;c++;}});
+    x.fillStyle=C.ink;x.font='700 26px '+FD;x.fillText(r,650,ry);
+    x.textAlign="right";x.fillStyle=C.muted;x.font='500 18px '+FM;x.fillText(`${c}/${list.length} · ${Math.round((s[1]+s[2]+s[3])/total*100)}%`,1015,ry);x.textAlign="left";
+    rr(x,C.land,650,ry+14,365,10,5); let bx=650; x.save(); x.beginPath(); x.roundRect?x.roundRect(650,ry+14,365,10,5):x.rect(650,ry+14,365,10); x.clip();
+    [3,2,1].forEach(l=>{const w=s[l]/total*365;x.fillStyle=C["l"+l];x.fillRect(bx,ry+14,w,10);bx+=w;}); x.restore();
+    ry+=106;});
+  // totals + legend
+  x.fillStyle=C.ink; x.font='700 30px '+FD; x.fillText(`${km.toFixed(1)} of ${Math.round(TOTAL)} km²  ·  ${n} of ${T.length} thanas`,60,1196);
+  let lx=60; [3,2,1].forEach(l=>{x.fillStyle=C["l"+l]; rr(x,C["l"+l],lx,1226,20,20,4); x.fillStyle=C.ink; x.font='600 22px '+FB; const t=`${LV[l]} ${cnt[l]}`; x.fillText(t,lx+30,1244); lx+=30+x.measureText(t).width+34;});
+  x.fillStyle=C.muted; x.font='500 18px '+FB; x.fillText("Unseen Dhaka with Mr. J",60,1310);
+  x.textAlign="right"; x.fillText(new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}),1020,1310); x.textAlign="left";
+  return new Promise(r=>cv.toBlob(r,"image/png"));
+}
+const sheet=document.getElementById("sheet"), cardImg=document.getElementById("cardImg"), sheetStatus=document.getElementById("sheetStatus"), saveBtn=document.getElementById("save");
+let cardBlob=null, cardURL="", downloads=null;
+if(window.claude&&claude.use) claude.use("downloads").then(d=>{downloads=d;}).catch(()=>{});
+document.getElementById("dl").addEventListener("click",async e=>{
+  const b=e.currentTarget; b.disabled=true; b.textContent="Making image…";
+  try{cardBlob=await makeCard(); if(cardURL)URL.revokeObjectURL(cardURL); cardURL=URL.createObjectURL(cardBlob); cardImg.src=cardURL;
+    sheetStatus.textContent = downloads ? "" : "Saving isn't available in this view. Press and hold (or right-click) the image to save it.";
+    saveBtn.hidden=!downloads; sheet.hidden=false; (downloads?saveBtn:document.getElementById("close")).focus();}
+  catch(err){say("Couldn't make the image. Try again.");}
+  b.disabled=false; b.textContent="Download image";
+});
+function closeSheet(){sheet.hidden=true;document.getElementById("dl").focus();}
+document.getElementById("close").addEventListener("click",closeSheet);
+sheet.addEventListener("click",e=>{if(e.target===sheet)closeSheet();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden)closeSheet();});
+saveBtn.addEventListener("click",async()=>{
+  if(!downloads||!cardBlob)return;
+  const slug=((prof.name||"").trim().replace(/[^\w\- ]+/g,"").replace(/\s+/g,"-")||"my")+"-unseen-dhaka.png";
+  sheetStatus.textContent="Waiting for you to confirm…";
+  try{const r=await downloads.save({filename:slug,data:cardBlob}); sheetStatus.textContent=r.status==="saved"?"Saved":"";}
+  catch(err){const c=err&&err.code; sheetStatus.textContent = c==="declined"?"Not saved":c==="rate_limited"?"A save prompt is already open":"Saving isn't available here. Press and hold (or right-click) the image to save it."; if(!["declined","rate_limited"].includes(c)) saveBtn.hidden=true;}
+});
+
+render();
+})();
+</script>
+
+</body></html>
